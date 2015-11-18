@@ -126,8 +126,14 @@ public class JavaClassBuilder {
 	                is = new BufferedInputStream(file.getInputStream(e));
                     JavaClass jc = parser.parse(is);
                     javaClasses.add(jc);
-                } finally {
-                    is.close();
+                } catch(ZipException ee) {
+    				throw new RuntimeException("Error while inspecting " + file.getName(), ee);
+    			}catch(SecurityException ee) {
+    				throw new RuntimeException("Error while inspecting " + file.getName(), ee);
+    			} finally {
+                	if(is!=null){
+                		is.close();
+                	}
                 }
             }
         }
